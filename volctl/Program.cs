@@ -19,13 +19,13 @@
  * 
  * Example Commands:
  *    volctl 50     - Sets the system volume to 50%.
- *    volctl -1     - Mutes the system volume.
+ *    volctl -1     - Toggle the system volume mute.
  *    volctl 30     - Sets the system volume to 30%.
- *    volctl         - Displays the help message if no arguments are passed.
+ *    volctl        - Displays the help message if no arguments are passed.
  * 
  * Author: Dan MacCormac
- * Date: 2024-12-07
- * Version: 1.0
+ * Date: 2024-12-08
+ * Version: 1.1
  * Website: https://github.com/dmaccormac/volctl
  *  
  ***************************************************************************/
@@ -55,15 +55,12 @@ class Program
             ShowHelp();
         }
 
-        // Optionally, wait for user input before exiting (useful for running from console)
-        //Console.WriteLine("Press any key to exit...");
-        //Console.ReadKey();
     }
 
     static void ShowHelp()
     {
         Console.WriteLine("Usage: volctl <volume-level>");
-        Console.WriteLine("<volume-level> is a number between 0 and 100, or -1 to mute.");
+        Console.WriteLine("<volume-level> is a number between 0 and 100, or -1 to toggle mute.");
         Console.WriteLine("Example: volctl 50");
         Console.WriteLine("https://github.com/dmaccormac/volctl");
     }

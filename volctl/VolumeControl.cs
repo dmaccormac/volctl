@@ -7,8 +7,8 @@ public class VolumeControl
         // Check for mute case
         if (n == -1)
         {
-            // Mute the volume (set it to 0%)
-            SetMute(true);
+            // toggle mute
+            ToggleMute();
             Console.WriteLine("Volume muted.");
             return;
         }
@@ -30,7 +30,7 @@ public class VolumeControl
                 // If the device is muted, unmute it before adjusting volume
                 if (device.AudioEndpointVolume.Mute)
                 {
-                    SetMute(false);
+                    ToggleMute();
                     Console.WriteLine("Volume unmuted.");
                 }
 
@@ -48,20 +48,21 @@ public class VolumeControl
         }
     }
 
-    // Helper method to mute or unmute the volume
-    private static void SetMute(bool mute)
+    private static void ToggleMute()
     {
         try
         {
             using (var enumerator = new MMDeviceEnumerator())
             {
                 var device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-                device.AudioEndpointVolume.Mute = mute;
+                device.AudioEndpointVolume.Mute = !device.AudioEndpointVolume.Mute;
+                Console.WriteLine(device.AudioEndpointVolume.Mute ? "Volume muted." : "Volume unmuted.");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error muting/unmuting volume: {ex.Message}");
+            Console.WriteLine($"Error toggling mute: {ex.Message}");
         }
     }
+
 }
