@@ -9,7 +9,6 @@ public class VolumeControl
         {
             // toggle mute
             ToggleMute();
-            Console.WriteLine("Volume muted.");
             return;
         }
 
@@ -31,7 +30,6 @@ public class VolumeControl
                 if (device.AudioEndpointVolume.Mute)
                 {
                     ToggleMute();
-                    Console.WriteLine("Volume unmuted.");
                 }
 
                 // Convert the percentage to a scalar value (0.0f to 1.0f)
