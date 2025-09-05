@@ -78,10 +78,13 @@ bool toggleMute() {
 int main(int argc, char* argv[]) {
 
     // show help message
-    if (strcmp(argv[1], "/?") == 0 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
-        std::cout << "volctl (v1.2) - utility to toggle system volume mute\n";
-        std::cout << "https://www.github.com/dmaccormac/volctl\n";
-        return 0;
+    if (argc > 1)
+    {
+        if (strcmp(argv[1], "/?") == 0 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
+            std::cout << "volctl (v1.2) - utility to toggle system volume mute\n";
+            std::cout << "https://www.github.com/dmaccormac/volctl\n";
+            return 0;
+        }
     }
 
 
