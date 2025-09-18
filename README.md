@@ -2,14 +2,14 @@
 
 ## Description
 
-volctl is a simple command-line utility to toggle mute on Windows.
+Command line tool to control system volume on Windows
 
 ## Usage
 
-Usage:
-      volctl        (toggles mute)
-      volctl /?     (show help message)
-
+volctl [volume]
+     
+If a volume level is provided (e.g., volctl 50), sets the system volume to that level (0-100).
+If no argument is provided, toggles mute on/off
 
 ## Author
 Dan MacCormac <dmaccormac@gmail.com>
@@ -18,8 +18,8 @@ Dan MacCormac <dmaccormac@gmail.com>
 https://github.com/dmaccormac
 
 ## Version
-1.2
+1.3
 
 ## Date
-2025-09-04
+2025-09-17
 
