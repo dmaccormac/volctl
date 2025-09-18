@@ -9,7 +9,7 @@
 #include <iostream>
 
 
-
+// Function to toggle system volume mute
 bool toggleMute() {
     HRESULT hr;
     bool result = false;
@@ -75,6 +75,7 @@ bool toggleMute() {
     return result;
 }
 
+// Function to set system volume (0-100)
 bool SetVolume(int n) {
     if (n < 0) n = 0;
     if (n > 100) n = 100;
@@ -128,20 +129,91 @@ bool SetVolume(int n) {
     return result;
 }
 
+// Function to check if system volume is muted
+bool isMuted() {
+
+	HRESULT hr;
+	bool result = false;
+	hr = CoInitialize(NULL);
+	if (FAILED(hr)) {
+		return false;
+	}
+	IMMDeviceEnumerator* pEnumerator = nullptr;
+	IMMDevice* pDevice = nullptr;
+	IAudioEndpointVolume* pEndpointVolume = nullptr;
+	hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_ALL,
+		__uuidof(IMMDeviceEnumerator), (void**)&pEnumerator);
+	if (FAILED(hr)) {
+		CoUninitialize();
+		return false;
+	}
+	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
+	if (FAILED(hr)) {
+		pEnumerator->Release();
+		CoUninitialize();
+		return false;
+	}
+	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_ALL, NULL, (void**)&pEndpointVolume);
+	if (FAILED(hr)) {
+		pDevice->Release();
+		pEnumerator->Release();
+		CoUninitialize();
+		return false;
+	}
+	BOOL bMute = FALSE;
+	hr = pEndpointVolume->GetMute(&bMute);
+	if (SUCCEEDED(hr)) {
+		result = bMute ? true : false;
+	}
+	pEndpointVolume->Release();
+	pDevice->Release();
+	pEnumerator->Release();
+	CoUninitialize();
+	return result;
+
+}
+
 int main(int argc, char* argv[]) {
 
-    // show help message
+	//arguments provided
     if (argc > 1)
     {
+        //Check for help flag
         if (strcmp(argv[1], "/?") == 0 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
-            std::cout << "volctl (v1.2) - utility to toggle system volume mute\n";
+            std::cout << "volctl (v1.3) - control system volume\n";
+            std::cout << "Usage: volctl [volume]\n";
+            std::cout << "If a volume level is provided (e.g., volctl 50), sets the system volume to that level (0-100).\n";
+            std::cout << "If no argument is provided, toggles mute on/off\n";
             std::cout << "https://www.github.com/dmaccormac/volctl\n";
             return 0;
         }
 
+        //set volume
+        else {
+
+			if (isMuted()) {
+				if (!toggleMute()) {
+					std::cerr << "Failed to unmute volume." << std::endl;
+					return 1;
+				}
+			}
+
+            int volume = atoi(argv[1]);
+            if (SetVolume(volume)) {
+                std::cout << "Volume set to " << volume << "%" << std::endl;
+                return 0;
+            }
+            else {
+                std::cerr << "Failed to set volume." << std::endl;
+                return 1;
+            }
+
+
+        }
+
     }
 
-
+	//no arguments, just toggle mute
 	if (toggleMute()) {
 		std::cout << "Volume mute toggled successfully." << std::endl;
 		return 0;
